@@ -74,7 +74,7 @@ pip install -r requirements.txt
 
 ### 5. Démarrage
 * Lancer le script à l'aide de la commande suivante : `flask run`
-* Lorsque le serveur fonctionne, l'application peut être consultée à partir de l'url [http://127.0.0.1:5000].
+* Lorsque le serveur fonctionne, l'application peut être consultée à partir de l'url [http://127.0.0.1:8000/].
   Les étapes 1, 2 et 4 ne sont requises que pour l'installation initiale. Pour les lancements ultérieurs du serveur de l'application, il suffit d'exécuter les étapes 3 et 5 à partir du répertoire racine du projet.
 
 
