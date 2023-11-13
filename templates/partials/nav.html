@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      
+        <a class="navbar-brand" href="{{url_for('authentication_app_public.home')}}">GUDLFT</a>
+        <!-- displayed on small screen  -->
+        <a class="navbar-brand fs-6 d-lg-none d-xl-none" href="{{ url_for('authentication_app_authenticated.my_profile') }}">{{ current_user.first_name }} {{ current_user.last_name }}</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+
+          <a class="nav-link" aria-current="page" href="{{url_for('authentication_app_public.home')}}">Accueil</a>
+          {%  if current_user.is_authenticated %}
+            {% if current_user.is_admin %}
+
+              <a class="nav-link" aria-current="page" href="{{url_for('authentication_app_admin.list_users')}}">Utilisateurs</a>
+              <a class="nav-link" href="#">Club</a>
+              <a class="nav-link" href="#">Compétition</a>
+
+            {% endif %}
+            <a class="nav-link" href="{{url_for('authentication_app_public.logout')}}">Déconnexion</a>
+
+          {% else %}
+
+            <a class="nav-link" href="{{url_for('authentication_app_public.login')}}">Connexion</a>
+            <a class="nav-link" href="{{url_for('authentication_app_public.signup')}}">S'inscrire</a>
+
+          {% endif %}
+          
+            <!-- displayed on wide screen  -->
+
+          {% if current_user.is_authenticated %} 
+            <a class="nav-link d-none d-xl-block d-lg-block position-absolute top-0 end-0 me-5 mt-2" href="{{ url_for('authentication_app_authenticated.my_profile') }}">
+                {{ "Administrateur" if current_user.is_admin  else "Secrétaire" }} {{ current_user.first_name }} {{ current_user.last_name }}
+            </a>
+          {% else %}
+            <a class="nav-link d-none d-xl-block d-lg-block position-absolute top-0 end-0 me-5 mt-2" href="{{ url_for('authentication_app_public.forgotten_password') }}">
+              Mot de passe oublié
+            </a>
+          {% endif %}
+
+        </div>
+
+      </div>
+    </div>
+  </nav>

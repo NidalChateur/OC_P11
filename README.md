@@ -20,8 +20,8 @@ maximum de 12 athlètes.
 
 
  ## Réalisations
- - Phase 1 du projet : régler les bogues du POC.
- - Phase 2 du projet : améliorer les fonctionnalités de l'application par des tests.
+ - <a href="https://github.com/OpenClassrooms-Student-Center/Python_Testing/issues"> Phase 1 du projet : régler les bogues du POC. </a>
+ - <a href="https://github.com/NidalChateur/OC_P11_GUDLFT/blob/main/mission/Spe%CC%81cifications_fonctionnelles.pdf">Phase 2 du projet : améliorer les fonctionnalités de l'application par des tests.</a> 
 
 ## Cas d'usages
 
@@ -67,15 +67,27 @@ cd OC_P11_GUDLFT
     * Windows : `env\Scripts\activate.bat`
     * Unix/MacOS : `source env/bin/activate`
    
-### 4. Installer les dépendances du projet
+### 4. Installer les dépendances du projet sans poetry
 ```
 pip install -r requirements.txt
 ```
 
-### 5. Démarrage
+### 4. Ou Installer les dépendances du projet avec poetry
+```
+pip install poetry
+
+poetry install
+```
+
+### 5. Démarrage sans poetry
 * Lancer le script à l'aide de la commande suivante : `flask run`
-* Lorsque le serveur fonctionne, l'application peut être consultée à partir de l'url [http://127.0.0.1:8000/].
-  Les étapes 1, 2 et 4 ne sont requises que pour l'installation initiale. Pour les lancements ultérieurs du serveur de l'application, il suffit d'exécuter les étapes 3 et 5 à partir du répertoire racine du projet.
+
+### 5. Démarrage avec poetry
+* Lancer le script à l'aide de la commande suivante : `poetry run flask run`
+
+Lorsque le serveur fonctionne, l'application peut être consultée à partir de l'url [http://127.0.0.1:5000].
+
+Les étapes 1, 2 et 4 ne sont requises que pour l'installation initiale. Pour les lancements ultérieurs du serveur de l'application, il suffit d'exécuter les étapes 3 et 5 à partir du répertoire racine du projet.
 
 
 

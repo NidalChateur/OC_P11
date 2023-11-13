@@ -1,0 +1,51 @@
+<!-- admin views -->
+{% if current_user.is_authenticated and current_user.is_admin %} 
+  {% if 'create' in request.url %}
+
+    <h1 class="my-5 text-center">Inscrire un utilisateur</h1>
+
+  {% elif 'update' in request.url and user %}
+
+    <h1 class="my-5 text-center">
+      Modifier le profil de {{user.first_name}} {{user.last_name}}
+    </h1>
+
+  {% endif %} 
+{% endif %}
+
+<!-- my_profile views-->
+{% if 'my-profile/update/' in request.url %}
+
+  <h1 class="my-5 text-center">Modifier son profil</h1>
+
+{% endif %}
+{% if 'my-profile/add-my-photo/' in request.url %}
+
+  <h1 class="my-5 text-center">Modifier ma photo de profil</h1>
+
+{% endif %}
+{% if 'change-my-password' in request.url %}
+
+  <h1 class="my-5 text-center">Modifier son mot de passe</h1>
+
+{% endif %}
+
+<!-- signup view-->
+{% if 'signup' in request.url %}
+  <h1 class="mb-5 text-center">Envoyer une demande d'inscription</h1>
+{% endif %}
+
+<!-- login view-->
+{% if 'login' in request.url %}
+  <h1 class="my-5 text-center">Connexion</h1>
+{% endif %}
+
+<!-- forgotten-password view-->
+{% if 'forgotten-password' in request.url %}
+  <h1 class="my-5 text-center">Réinitialiser votre mot de passe</h1>
+{% endif %}
+
+<!-- reset-password view-->
+{% if 'reset-password' in request.url %}
+  <h1 class="my-5 text-center">Réinitialiser votre mot de passe</h1>
+{% endif %}

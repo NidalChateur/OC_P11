@@ -1,0 +1,19 @@
+{% from 'bootstrap5/form.html' import render_form %}
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% include "partials/user_form_title.html" %}
+
+
+    <form method="POST" enctype="multipart/form-data" class="shadow p-5 bg-body-tertiary rounded rounded-5 ">
+        
+        {{ form.csrf_token }}
+        
+        {{ form.hidden_tag() }} 
+        
+        {{ render_form(form) }}
+        
+    </form>
+
+{% endblock %}
