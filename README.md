@@ -1,51 +1,81 @@
-# gudlift-registration
+[![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com) 
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
-1. Why
+# Projet GUDLFT
 
+<p align="center">
+  <img src="./icon.jpg" alt="Icone GUDLFT">
+</p>
 
-    This is a proof of concept (POC) project to show a light-weight version of our competition booking platform. The aim is the keep things as light as possible, and use feedback from the users to iterate.
-
-2. Getting Started
-
-    This project uses the following technologies:
-
-    * Python v3.x+
-
-    * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
-
-        Whereas Django does a lot of things for us out of the box, Flask allows us to add only what we need. 
-     
-
-    * [Virtual environment](https://virtualenv.pypa.io/en/stable/installation.html)
-
-        This ensures you'll be able to install the correct packages without interfering with Python on your machine.
-
-        Before you begin, please ensure you have this installed globally. 
+ L'objectif de l'application est de rationaliser la gestion des compétitions entre les clubs (hébergement, inscriptions, frais et administration). L'application permettra aux clubs d'inscrire des athlètes aux compétitions organisées au sein
+de la division. Seules les admins et les secrétaires de club auront accès à l'application.
 
 
-3. Installation
 
-    - After cloning, change into the directory and type <code>virtualenv .</code>. This will then set up a a virtual python environment within that directory.
+Actuellement, les clubs gagnent des points via la mise en place et le déroulement des
+compétitions. Chaque club peut voir son solde actuel et échanger des points pour inscrire
+des athlètes à de futures compétitions, à raison d'un point par inscription. Chaque
+compétition aura un nombre limité d'inscriptions, et chaque club ne peut inscrire qu'un
+maximum de 12 athlètes.
 
-    - Next, type <code>source bin/activate</code>. You should see that your command prompt has changed to the name of the folder. This means that you can install packages in here without affecting affecting files outside. To deactivate, type <code>deactivate</code>
 
-    - Rather than hunting around for the packages you need, you can install in one step. Type <code>pip install -r requirements.txt</code>. This will install all the packages listed in the respective file. If you install a package, make sure others know by updating the requirements.txt file. An easy way to do this is <code>pip freeze > requirements.txt</code>
+ ## Réalisations
+ - Phase 1 du projet : régler les bogues du POC.
+ - Phase 2 du projet : améliorer les fonctionnalités de l'application par des tests.
 
-    - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
+## Cas d'usages
 
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
+ #### Cas d'usages d'un utilisateur "visiteur" (non connecté)
+- Par souci de transparence, les visiteurs peuvent consulter le nombre de points disponibles pour chaque club. 
 
-4. Current Setup
+ #### Cas d'usages d'un utilisateur "secrétaire"
+  1. Les secrétaires des clubs pourront utiliser leur adresse électronique pour se connecter.
+  2. Les secrétaires peuvent consulter la liste des compétitions à venir.
+  3. Les secrétaires pourront ensuite sélectionner une compétition et utiliser leurs points pour acheter des places.
+  4. Les secrétaires devraient voir un message confirmant le nombre de places achetées, ou un message indiquant que le concours est complet. Les points utilisés doivent être déduits du total précédent.
+  5. Les secrétaires ne devraient pas pouvoir réserver plus de places que celles disponibles ou plus de 12 places dans une compétition (afin de garantir l'équité envers les autres clubs).
+  6. Les secrétaires des clubs pourront se déconnecter.
 
-    The app is powered by [JSON files](https://www.tutorialspoint.com/json/json_quick_guide.htm). This is to get around having a DB until we actually need one. The main ones are:
-     
-    * competitions.json - list of competitions
-    * clubs.json - list of clubs with relevant information. You can look here to see what email addresses the app will accept for login.
+ #### Cas d'usages d'un utilisateur "admin"
+ 1. Les admins pourront utiliser leur adresse électronique pour se connecter.
+ 2. Les admins pourront inscrire un secretaire de club sur l'application.
+ 3. Les admins pourront supprimer ou bloquer un compte secretaire de club sur l'application.
+ 4. Les admins pourront supprimer ou bloquer un compte secretaire de club sur l'application.
+ 5. Les admins pourront ajouter une compétition sur l'application.
+ 6. Les admins pourront supprimer une compétition sur l'application.
+ 7. Les admins pourront attribuer des points aux secrétaires de club sur l'application.
+    
+    
 
-5. Testing
+## Pré-requis
 
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
+* Installer Python 3 : [Téléchargement Python 3](https://www.python.org/downloads/)
+* Installer git : [Téléchargement Git](https://git-scm.com/book/fr/v2/D%C3%A9marrage-rapide-Installation-de-Git)
 
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
+## Installation
+
+### 1. Télécharger le projet sur votre répertoire local : 
+```
+git clone https://github.com/NidalChateur/OC_P11_GUDLFT.git 
+cd OC_P11_GUDLFT
+```
+### 2. Mettre en place un environnement virtuel :
+* Créer l'environnement virtuel: `python -m venv env`
+
+### 3. Activer l'environnement virtuel
+* Activer l'environnement virtuel :
+    * Windows : `env\Scripts\activate.bat`
+    * Unix/MacOS : `source env/bin/activate`
+   
+### 4. Installer les dépendances du projet
+```
+pip install -r requirements.txt
+```
+
+### 5. Démarrage
+* Lancer le script à l'aide de la commande suivante : `flask run`
+* Lorsque le serveur fonctionne, l'application peut être consultée à partir de l'url [http://127.0.0.1:5000].
+  Les étapes 1, 2 et 4 ne sont requises que pour l'installation initiale. Pour les lancements ultérieurs du serveur de l'application, il suffit d'exécuter les étapes 3 et 5 à partir du répertoire racine du projet.
+
+
 
