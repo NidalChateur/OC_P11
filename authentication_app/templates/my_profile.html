@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="my-5 text-center">Mon profil</h1>
+    <div class="offset-xl-3 col-xl-6">
+
+        <!-- profile photo -->
+        <div class="row d-flex justify-content-center">
+            <p  class="d-flex justify-content-center"><img src="
+                {% if current_user.image %}
+                    {{ url_for('static', filename=current_user.image) }}
+                {% else %}
+                    {{ url_for('static', filename='img/profile_photo/default_profile.png') }}
+                {% endif %}"
+                alt="Photo de profile" class="img-thumbnail rounded rounded-5">
+
+                <a href="{{ url_for('authentication_app_authenticated.add_my_photo') }}" role="button" class="h-25 link-underline-light me-2" title="Modifier ma photo de profil">✏️</a>
+                <a href="{{ url_for('authentication_app_authenticated.delete_my_photo') }}" role="button" class="h-25 link-underline-light"title="Supprimer ma photo de profil">❌</a>
+            </p>
+        </div>
+
+        <!-- user attributes -->
+        <p><span class="fw-bold">Role :</span> {{ "Administrateur" if current_user.is_admin  else "Secrétaire" }}</p>
+        <p><span class="fw-bold">Prénom :</span> {{ current_user.first_name }}</p>
+        <p><span class="fw-bold">Nom :</span> {{ current_user.last_name }}</p>
+        <p><span class="fw-bold">Date de naissance :</span> {{ current_user.birthdate_formatter }}</p>
+        <p><span class="fw-bold">Email :</span> {{ current_user.email }}</p>
+        
+        <!-- buttons -->
+        <p><a href="{{ url_for('authentication_app_authenticated.update_my_profile') }}" role="button" class="btn btn-outline-secondary w-100 btn-sm">Modifier mes informations personnelles</a></p> 
+        <p><a href="{{ url_for('authentication_app_authenticated.change_my_password') }}" role="button" class="btn btn-outline-secondary btn-sm w-100">Changer de mot de passe</a></p>
+        <p><a href="{{ url_for('authentication_app_authenticated.delete_my_account_confirmation') }}" role="button" class="btn btn-danger btn-sm w-100">Supprimer mon compte</a></p>
+
+    </div>
+
+
+{% endblock %}

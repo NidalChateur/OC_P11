@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1 class="my-5 text-center">Liste des utilisateurs</h1>
+
+  <p><a class="btn btn-primary offset-0 offset-xl-1 " href="{{url_for('authentication_app_admin.create_user')}}">Inscrire un nouvel utilisateur</a></p>
+
+  <!-- table displayed on wide screen -->
+  <table class="table offset-0 offset-xl-1 d-none d-lg-block">
+      <!-- columns -->
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Role</th>
+          <th scope="col">Prénom</th>
+          <th scope="col">Nom</th>
+          <th scope="col">Date de naissance</th>
+          <th scope="col">Email</th>
+          <th scope="col">Statut</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for user in users %}
+            <!-- rows -->
+          <tr class="{{'' if user.is_activated else 'table-warning'}}">
+            <th scope="row">{{user.id}}</th>
+            <td>{{"Administrateur" if user.role=="admin" else "Secrétaire"}}</td>
+            <td>{{user.first_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.birthdate_formatter}}</td>
+            <td>{{user.email}}</td>
+            <td>{{"Actif" if user.is_activated else "Inactif"}}</td>
+            <td>
+                <a class="btn btn-outline-secondary btn-sm" role="button" href="{{ url_for('authentication_app_admin.update_user', id=user.id) }}">Modifier</a>
+            </td>
+            <td>
+                <a class="btn btn-outline-secondary btn-sm" role="button" href="{{ url_for('authentication_app_admin.activate_deactivate_user', id=user.id) }}">
+                    {{"Désactiver" if user.is_activated else "Activer"}}
+                </a>
+            </td>
+            <td>
+                <a role="button" class="btn btn-danger btn-sm" href="{{ url_for('authentication_app_admin.delete_user_confirmation', id=user.id) }}">Supprimer</a>
+            </td>
+          </tr>
+
+        {% endfor %}
+
+      </tbody>
+
+  </table>
+
+<!-- table displayed on small screen -->
+  <table class="table table-hover offset-0 d-lg-none">
+    <!-- columns -->
+    <thead>
+      <tr>
+        <th scope="col" class="d-none d-sm-block">Role</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      {% for user in users %}
+          <!-- rows -->
+        <tr>
+          <td class="d-none d-sm-block">{{"Administrateur" if user.role=="admin" else "Secrétaire"}}</td>
+          <td>{{user.email}}</td>
+          <td>
+              <a  title="Modifier" class="btn" role="button" href="{{ url_for('authentication_app_admin.update_user', id=user.id) }}">✏️</a>
+          </td>
+          <td>
+              <a title="{{'Désactiver' if user.is_activated else 'Activer'}}" class="btn" role="button" href="{{ url_for('authentication_app_admin.activate_deactivate_user', id=user.id) }}">
+                  {{"🔒" if user.is_activated else "🔓"}}
+              </a>
+          </td>
+          <td>
+              <a title="Supprimer" role="button" class="btn" href="{{ url_for('authentication_app_admin.delete_user_confirmation', id=user.id) }}">❌</a>
+
+          </td>
+        </tr>
+
+      {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
