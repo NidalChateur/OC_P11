@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1 class="my-5 text-center">Confirmation de suppression de club</h1>
+    <div class="offset-lg-3 col-lg-6 shadow p-3 mb-5 bg-body-tertiary rounded rounded-5 p-5">
+
+        <p class="fw-bold my-5">Attention toutes les données liées à ce club seront définitivement perdues !</p>
+        <p>Souhaitez vous vraiment supprimer définitivement le club suivant :</p>
+        
+        <ul>
+            <li>ID : {{ club.id }}</li>
+            <li>Nom : {{ club.name }}</li>
+            <li>Points : {{ club.points }}</li>
+        </ul>
+        
+    
+        <!-- buttons -->
+        <p class="my-5">
+            {% if delete_from_my_club_profile %}
+                <a href="{{ url_for('club_app_authenticated.delete_my_club') }}" role="button" class="btn btn-danger  d-block">
+                    Supprimer définitivement mon club
+                </a> 
+            {% else %}
+                <a href="{{ url_for('club_app_admin.delete_club', id=club.id) }}" role="button" class="btn btn-danger  d-block">
+                    Supprimer définitivement le club {{club.name}}
+                </a> 
+            {% endif %}
+        </p>
+    </div>
+
+
+{% endblock %}

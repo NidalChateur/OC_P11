@@ -38,6 +38,6 @@ authentication_app_admin.add_url_rule(
     view_func=DeleteUser.as_view("delete_user"),
 )
 authentication_app_admin.add_url_rule(
-    "/admin/users/<int:id>/activate-deactivate/",
+    "/admin/users/<int:id>/activate_deactivate/",
     view_func=ActivateDeactivateUser.as_view("activate_deactivate_user"),
 )

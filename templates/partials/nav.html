@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
       
-        <a class="navbar-brand" href="{{url_for('authentication_app_public.home')}}">GUDLFT</a>
+        <a class="navbar-brand" href="{{url_for('club_app_public.list_clubs')}}">GUDLFT</a>
         <!-- displayed on small screen  -->
         <a class="navbar-brand fs-6 d-lg-none d-xl-none" href="{{ url_for('authentication_app_authenticated.my_profile') }}">{{ current_user.first_name }} {{ current_user.last_name }}</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,15 +10,36 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
 
-          <a class="nav-link" aria-current="page" href="{{url_for('authentication_app_public.home')}}">Accueil</a>
+          <a class="nav-link" aria-current="page" href="{{url_for('club_app_public.list_clubs')}}">
+            Accueil
+          </a>
           {%  if current_user.is_authenticated %}
+
             {% if current_user.is_admin %}
 
-              <a class="nav-link" aria-current="page" href="{{url_for('authentication_app_admin.list_users')}}">Utilisateurs</a>
-              <a class="nav-link" href="#">Club</a>
-              <a class="nav-link" href="#">Compétition</a>
+              <a class="nav-link" aria-current="page" href="{{url_for('authentication_app_admin.list_users')}}">
+                Utilisateurs
+              </a>
+              <a class="nav-link" aria-current="page" href="{{url_for('club_app_admin.list_clubs')}}">
+                Clubs
+              </a>
+              <a class="nav-link" href="{{ url_for('competition_app_admin.list_competitions') }}">
+                Compétitions
+              </a>
+              <a class="nav-link" href="{{ url_for('competition_app_admin.list_reservations') }}">
+                Réservations
+              </a>
 
             {% endif %}
+
+            {% if not current_user.is_admin  %}
+
+              <a class="nav-link" href="{{url_for('club_app_authenticated.my_club')}}">Mon Club</a>
+              <a class="nav-link" href="{{ url_for('competition_app_authenticated.list_competitions') }}">Compétitions</a>
+              <a class="nav-link" href="{{ url_for('competition_app_authenticated.list_reservations')}}">Mes Réservations</a>
+            
+            {% endif %}
+
             <a class="nav-link" href="{{url_for('authentication_app_public.logout')}}">Déconnexion</a>
 
           {% else %}

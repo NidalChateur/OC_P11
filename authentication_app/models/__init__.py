@@ -15,20 +15,6 @@ bcrypt = Bcrypt()
 
 
 class CrudMixin(object):
-    MONTHS = [
-        "janvier",
-        "février",
-        "mars",
-        "avril",
-        "mai",
-        "juin",
-        "juillet",
-        "août",
-        "septembre",
-        "octobre",
-        "novembre",
-        "décembre",
-    ]
     IMAGE_WIDTH = 200
     SPECIAL_CHARACTERS = '!@#$%^&*(),.;?":{}|<>_=/+-*µ£€§¤çàùéè°'
     ALLOWED_IMAGE_EXTENSION = ["jpg", "png", "jpeg", "gif", "bmp", "ico", "tiff"]
@@ -76,27 +62,28 @@ class CrudMixin(object):
         return value
 
     def delete_image(self):
-        if self.image:
-            user_image = BASE_DIR / UPLOAD_FOLDER / self.image
-            if os.path.exists(user_image):
-                os.remove(user_image)
-            self.image = None
-            self.save()
+        if hasattr(self, "image"):
+            if self.image:
+                user_image = BASE_DIR / UPLOAD_FOLDER / self.image
+                if os.path.exists(user_image):
+                    os.remove(user_image)
+                self.image = None
+                self.save()
 
     def create(self):
-        """save the user instance in db"""
+        """save the instance in db"""
 
         db.session.add(self)
         db.session.commit()
 
     @staticmethod
     def save():
-        "(update) save the user instance changes in db"
+        "(update) update the instance attributes in db"
 
         db.session.commit()
 
     def delete(self):
-        """delete the user instance from db"""
+        """delete the instance from db"""
 
         self.delete_image()
         db.session.delete(self)

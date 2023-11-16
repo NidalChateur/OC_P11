@@ -3,11 +3,12 @@ from flask.views import MethodView
 from flask_login import current_user, login_required, logout_user
 
 from authentication_app.forms.authenticated import (
+    AddMyPhotoForm,
     ChangeMyPasswordForm,
     UpdateMyProfileForm,
-    AddMyPhotoForm,
 )
 from authentication_app.models.user import User
+from club_app.models.club import Club
 
 
 class MyProfile(MethodView):
@@ -102,6 +103,11 @@ class DeleteMyAccount(MethodView):
 
     def get(self):
         user = User.query.get(current_user.id)
+        club = Club.query.filter_by(secretary_id=user.id).first()
+        if club:
+            club.secretary_id = None
+            club.save()
+
         user.delete()
         logout_user()
 
