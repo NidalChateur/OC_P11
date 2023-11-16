@@ -23,7 +23,7 @@ from email_app.templates import (
 class Signup(MethodView):
     def get(self):
         if current_user.is_authenticated:
-            return redirect(url_for("authentication_app_public.home"))
+            return redirect(url_for("club_app_public.list_clubs"))
         form = SignupForm()
 
         return render_template("user_form.html", form=form)
@@ -62,7 +62,7 @@ class Signup(MethodView):
 class Login(MethodView):
     def get(self):
         if current_user.is_authenticated:
-            return redirect(url_for("authentication_app_public.home"))
+            return redirect(url_for("club_app_public.list_clubs"))
         form = LoginForm()
 
         return render_template("user_form.html", form=form)
@@ -75,7 +75,7 @@ class Login(MethodView):
 
             flash("Connexion réussie !", "success")
 
-            return redirect(url_for("authentication_app_public.home"))
+            return redirect(url_for("club_app_public.list_clubs"))
 
         return render_template("user_form.html", form=form)
 
@@ -88,15 +88,10 @@ class Logout(MethodView):
         return redirect(url_for("authentication_app_public.login"))
 
 
-class Home(MethodView):
-    def get(self):
-        return render_template("home.html")
-
-
 class ForgottenPassword(MethodView):
     def get(self):
         if current_user.is_authenticated:
-            return redirect(url_for("authentication_app_public.home"))
+            return redirect(url_for("club_app_public.list_clubs"))
 
         form = ForgottenPasswordForm()
 
@@ -133,7 +128,7 @@ class ForgottenPassword(MethodView):
 class ResetPassword(MethodView):
     def get(self, token):
         if current_user.is_authenticated:
-            return redirect(url_for("authentication_app_public.home"))
+            return redirect(url_for("club_app_public.list_clubs"))
         form = ResetPasswordForm()
 
         return render_template("user_form.html", form=form)

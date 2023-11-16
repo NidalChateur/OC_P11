@@ -5,6 +5,7 @@ from flask_login import current_user, logout_user
 from authentication_app.decorator import admin_required
 from authentication_app.forms.admin import CreateUserForm, UpdateUserForm
 from authentication_app.models.user import User
+from club_app.models.club import Club
 from email_app.send_email import send_email
 from email_app.templates import ACTIVE_CONTENT, ACTIVE_SUBJECT
 
@@ -100,45 +101,12 @@ class UpdateUser(MethodView):
         return render_template("user_form.html", form=form, user=user)
 
 
-class DeleteUserConfirmation(MethodView):
-    decorators = [admin_required]
-
-    def get(self, id):
-        user = User.query.get(id)
-
-        return render_template("delete_user_confirmation.html", user=user)
-
-
-class DeleteUser(MethodView):
-    decorators = [admin_required]
-
-    def get(self, id):
-        user = User.query.get(id)
-
-        if user and user.id != current_user.id:
-            email = user.email
-            user.delete()
-            flash(
-                f"Le compte utilisateur '{email}' a été supprimé avec succès !",
-                "success",
-            )
-
-            return redirect(url_for("authentication_app_admin.list_users"))
-
-        # case when the admin delete his own account
-        if user and user.id == current_user.id:
-            user.delete()
-            logout_user()
-            flash("Votre compte utilisateur a été supprimé.", "info")
-
-            return redirect(url_for("authentication_app_public.login"))
-
-
 class ActivateDeactivateUser(MethodView):
     decorators = [admin_required]
 
     def get(self, id):
         user = User.query.get(id)
+
         if user:
             if user.is_activated:
                 user.is_activated = False
@@ -160,3 +128,44 @@ class ActivateDeactivateUser(MethodView):
             user.save()
 
             return redirect(url_for("authentication_app_admin.list_users"))
+
+
+class DeleteUserConfirmation(MethodView):
+    decorators = [admin_required]
+
+    def get(self, id):
+        user = User.query.get(id)
+
+        return render_template("delete_user_confirmation.html", user=user)
+
+
+class DeleteUser(MethodView):
+    decorators = [admin_required]
+
+    def get(self, id):
+        user = User.query.get(id)
+        user_club = Club.query.filter_by(secretary_id=user.id).first()
+        email = user.email
+
+        # case when the deleted user is assigned to a club as a secretary
+        if user_club:
+            user_club.secretary_id = None
+            user_club.save()
+
+        # case when the admin delete another user account
+        if user and user.id != current_user.id:
+            user.delete()
+            flash(
+                f"Le compte utilisateur '{email}' a été supprimé avec succès !",
+                "success",
+            )
+
+            return redirect(url_for("authentication_app_admin.list_users"))
+
+        # case when the admin delete his own account
+        if user and user.id == current_user.id:
+            user.delete()
+            logout_user()
+            flash("Votre compte utilisateur a été supprimé.", "info")
+
+            return redirect(url_for("authentication_app_public.login"))

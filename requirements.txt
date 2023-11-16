@@ -1,7 +1,3 @@
-coverage
-email_validator
-flake8
-flake8-html
 flask
 flask-sqlalchemy
 flask_bootstrap
@@ -10,11 +6,15 @@ Flask-Migrate
 Flask-Login
 Flask-Bcrypt
 flask_uploads
-locust
+email_validator
 poetry
-Pillow
 pytest
 pytest-flask
+coverage
 pytest-cov
+locust
+Pillow
+flake8
+flake8-html
 python-dotenv
 python-decouple

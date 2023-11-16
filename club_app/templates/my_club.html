@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block page_title %}Mon club{% endblock %}
+
+{% block content %}
+    <h1 class="my-5 text-center">Mon Club</h1>
+    <div class="offset-xl-3 col-xl-6">
+
+        {% if club %}
+            <!-- club attributes -->
+            <p><span class="fw-bold">Nom :</span> {{ club.name }}</p>
+            <p><span class="fw-bold">Point :</span> {{ club.points }}</p>
+            <p><span class="fw-bold">Secrétaire :</span> {{ club.secretary_name }}</p>
+            
+            <!-- buttons -->
+            <p>
+                <a href="{{ url_for('club_app_authenticated.update_my_club') }}" role="button" class="btn btn-outline-secondary w-100 btn-sm">
+                    Modifier mon club
+                </a>
+            </p> 
+            <p>
+                <a href="{{ url_for('club_app_authenticated.delete_my_club_confirmation') }}" role="button" class="btn btn-danger btn-sm w-100">
+                    Supprimer mon club
+                </a>
+            </p>
+        {% else %}
+            <p>Vous n'avez aucun club assigné à votre compte utilisateur.</p>
+
+            <p>
+                <a href="{{ url_for('club_app_authenticated.create_my_club') }}" role="button" class="btn btn-outline-secondary w-100 btn-sm">
+                    Créer mon club
+                </a>
+            </p> 
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
