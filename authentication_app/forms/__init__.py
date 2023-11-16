@@ -58,7 +58,8 @@ class MixinPassword(FlaskForm):
             DataRequired(),
             EqualTo("password_confirm", "Les mots de passe ne correspondent pas."),
         ],
-        description="Votre mot de passe doit contenir au minimum 8 caractères, un chiffre, une lettre, une majuscule, une miniscule et un caractère spécial",
+        description="Votre mot de passe doit contenir au minimum 8 caractères,"
+        + " un chiffre, une lettre, une majuscule, une miniscule et un caractère spécial",
     )
 
 
@@ -69,7 +70,8 @@ class MixinNewPassword(FlaskForm):
             DataRequired(),
             EqualTo("password_confirm", "Les mots de passe ne correspondent pas."),
         ],
-        description="Votre mot de passe doit contenir au minimum 8 caractères, un chiffre, une lettre, une majuscule, une miniscule et un caractère spécial",
+        description="Votre mot de passe doit contenir au minimum 8 caractères, un chiffre,"
+        + " une lettre, une majuscule, une miniscule et un caractère spécial.",
     )
 
 

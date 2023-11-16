@@ -9,7 +9,7 @@ def admin_required(view_func):
     def decorated_view(*args, **kwargs):
         if not current_user.is_authenticated or not current_user.is_admin:
             flash("Permission refusée !", "error")
-            return redirect(url_for("authentication_app.login"))
+            return redirect(url_for("authentication_app_public.login"))
         return view_func(*args, **kwargs)
 
     return decorated_view

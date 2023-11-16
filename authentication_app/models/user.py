@@ -1,34 +1,32 @@
-""" 
-flask shell : 
-from authentication_app.models import User
-from datetime import date
-d=date(1999,1,1)
-user=User(role="admin", first_name="john", last_name="doe", birthdate=d, email="admin@gmail.com")
- """
-
 import re
 import secrets
 from datetime import date, datetime, timedelta
 
 from flask_login import UserMixin
-from . import CrudMixin, db, bcrypt
 from sqlalchemy.orm import validates
+
+from . import CrudMixin, bcrypt, db
 
 
 class User(db.Model, CrudMixin, UserMixin):
     IMAGE_PATH = "img/profile_photo/"
 
     id = db.Column(db.Integer, primary_key=True)
+
     role = db.Column(db.Enum("admin", "secretary"), nullable=False)
     first_name = db.Column(db.String(128), nullable=False)
     last_name = db.Column(db.String(128), nullable=False)
     birthdate = db.Column(db.Date, nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
+
     password = db.Column(db.String(128), nullable=True)
     is_activated = db.Column(db.Boolean, default=True)
     image = db.Column(db.String(255), nullable=True)
+
+    # token field is used to reset password
     token = db.Column(db.String(100), nullable=True, unique=True)
     token_expiration_date = db.Column(db.DateTime, nullable=True)
+
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(
@@ -63,10 +61,9 @@ class User(db.Model, CrudMixin, UserMixin):
 
     @property
     def birthdate_formatter(self) -> str:
-        birthdate = self.birthdate
+        return self.birthdate.strftime("%d/%m/%Y")
 
-        return f"{birthdate.day} {self.MONTHS[birthdate.month-1]} {birthdate.year}"
-
+    # inutile ?
     def _validate_password(self, password: str):
         if not isinstance(password, str):
             raise ValueError("Votre mot de passe doit être du type str (string)")
@@ -112,6 +109,11 @@ class User(db.Model, CrudMixin, UserMixin):
         # entered by the user in form
         return bcrypt.check_password_hash(self.password, password)
 
+    def generate_reset_token(self):
+        self.token = secrets.token_urlsafe(32)
+        self.token_expiration_date = datetime.utcnow() + timedelta(hours=1)
+        self.save()
+
     @staticmethod
     def age(birthdate: date) -> int:
         """return the user age from his birthdate"""
@@ -125,6 +127,7 @@ class User(db.Model, CrudMixin, UserMixin):
 
         return age
 
+    # inutile?
     @validates("birthdate")
     def validate_date_of_birth(self, key, value):
         """check if the user age is > 18"""
@@ -133,6 +136,7 @@ class User(db.Model, CrudMixin, UserMixin):
             raise ValueError("L'utilisateur doit être majeur (18 ans ou plus).")
         return value
 
+    # inutile?
     @validates("email")
     def validate_email(self, key, value):
         """check the email format and if the email is unique in db,
@@ -153,6 +157,7 @@ class User(db.Model, CrudMixin, UserMixin):
 
         return value
 
+    # inutile?
     @validates("password")
     def validate_password(self, key, value):
         """check the password complexity"""
@@ -162,19 +167,49 @@ class User(db.Model, CrudMixin, UserMixin):
 
         return value
 
-    def generate_reset_token(self):
-        self.token = secrets.token_urlsafe(32)
-        self.token_expiration_date = datetime.utcnow() + timedelta(hours=1)
-        self.save()
-
     @staticmethod
-    def create_admin():
-        user = User(
+    def init_db():
+        """create in db :
+        - 1 admin user
+        - 3 secretary users"""
+
+        db.create_all()
+        admin = User(
             role="admin",
-            first_name="admin",
-            last_name="admin",
-            birthdate=date(2000, 1, 1),
-            email="admin@gmail.com",
+            first_name="Sys",
+            last_name="Moderator",
+            birthdate=date(2001, 1, 1),
+            email="admin@admin.com",
         )
-        user.create()
-        user.set_password("00000000pW-")
+        admin.create()
+        admin.set_password("00000000pW-")
+
+        secretary_1 = User(
+            role="secretary",
+            first_name="John",
+            last_name="Doe",
+            birthdate=date(2001, 1, 1),
+            email="john@simplylift.co",
+        )
+        secretary_1.create()
+        secretary_1.set_password("00000000pW-")
+
+        secretary_2 = User(
+            role="secretary",
+            first_name="Iron",
+            last_name="Man",
+            birthdate=date(2001, 1, 1),
+            email="admin@irontemple.com",
+        )
+        secretary_2.create()
+        secretary_2.set_password("00000000pW-")
+
+        secretary_3 = User(
+            role="secretary",
+            first_name="Kate",
+            last_name="Woman",
+            birthdate=date(2001, 1, 1),
+            email="kate@shelifts.co.uk",
+        )
+        secretary_3.create()
+        secretary_3.set_password("00000000pW-")

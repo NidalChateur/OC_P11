@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block page_title %}{{"Clubs" if "admin/clubs/" in request.url else "Accueil"}}{% endblock %}
+
+{% block content %}
+
+    {% if 'admin/clubs' in request.url %}
+        <h1 class="my-5 text-center">Liste des clubs [Admin]</h1>
+        <p><a class="btn btn-primary" href="{{ url_for('club_app_admin.create_club') }}">Inscrire un club</a></p>
+    {% else %}
+        <h1 class="my-5 text-center">Liste des clubs</h1>
+    {% endif %}
+
+    <div class="row">
+        
+        {% if 'admin/clubs' in request.url %}
+            <!-- admin on wide screen -->
+            <div class="d-none d-lg-block">
+            
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col" >Secrétaire</th>
+                            <th scope="col">Points</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Statut</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                    {% for club in clubs %}
+                        <!-- rows -->
+                        <tr class="{{'' if club.is_activated else 'table-warning'}}">            
+                        <th scope="row">{{ club.id }}</th>
+                        <td>{{ club.name }}</td>
+                        <td >{{ club.secretary_name }}</td>
+                        <td>{{ club.points }}</td>
+                        <td>{{ club.email }}</td>
+                        <td>{{"Actif" if club.is_activated else "Inactif"}}</td>
+                        <td>
+                            <a class="btn btn-outline-secondary btn-sm" role="button" href="{{ url_for('club_app_admin.activate_deactivate_club', id=club.id) }}">
+                                {{"Désactiver" if club.is_activated else "Activer"}}
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-secondary btn-sm" role="button" href="{{ url_for('club_app_admin.update_club', id=club.id) }}">
+                                Modifier
+                            </a>
+                        </td>
+                        <td>
+                            <a role="button" class="btn btn-danger btn-sm" href="{{ url_for('club_app_admin.delete_club_confirmation', id=club.id) }}">
+                                Supprimer
+                            </a>
+                        </td>
+                        </tr>
+        
+                    {% endfor %}
+        
+                    </tbody>
+        
+                </table>
+
+            </div>
+
+            <!-- admin on small screen -->
+            <div class="d-lg-none">
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Points</th>
+                    </tr>
+                    </thead>
+        
+                    <tbody>
+                    {% for club in clubs %}
+                        <!-- rows -->
+                        <tr class="{{'' if club.is_activated else 'table-warning'}}">            
+                            <td>{{ club.name }}</td>
+                            <td>{{ club.points }}</td>
+                            <td>
+                                <a title="{{'Désactiver' if club.is_activated else 'Activer'}}" class="btn" role="button" href="{{ url_for('club_app_admin.activate_deactivate_club', id=club.id) }}">
+                                    {{"🔒" if club.is_activated else "🔓"}}
+                                </a>
+                            </td>
+                            <td>
+                                <a  title="Modifier" class="btn" role="button" href="{{ url_for('club_app_admin.update_club', id=club.id) }}">
+                                    ✏️
+                                </a>
+                            </td>
+                            <td>
+                                <a title="Supprimer" role="button" class="btn" href="{{ url_for('club_app_admin.delete_club_confirmation', id=club.id) }}">
+                                    ❌
+                                </a>
+                            </td>
+                        </tr>
+        
+                    {% endfor %}
+        
+                    </tbody>
+        
+                </table>
+            </div>
+        {% else %}
+            <!-- anonymous on wide screen -->
+            <div class="offset-lg-2 col-lg-8 d-none d-lg-block">
+            
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col" >Secrétaire</th>
+                        <th scope="col">Points</th>
+                    </tr>
+                    </thead>
+        
+                    <tbody>
+                    {% for club in clubs %}
+                        <!-- rows -->
+                        <tr>            
+                        <td>{{ club.name }}</td>
+                        <td >{{ club.secretary_name }}</td>
+                        <td>{{ club.points }}</td>
+                        </tr>
+        
+                    {% endfor %}
+        
+                    </tbody>
+        
+                </table>
+
+            </div>
+
+            <!-- anonymous on small screen -->
+            <div class="d-lg-none">
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Points</th>
+                    </tr>
+                    </thead>
+        
+                    <tbody>
+                    {% for club in clubs %}
+                        <!-- rows -->
+                        <tr>            
+                            <td>{{ club.name }}</td>
+                            <td>{{ club.points }}</td>
+                        </tr>
+        
+                    {% endfor %}
+        
+                    </tbody>
+        
+                </table>
+            </div>
+        {% endif %}
+
+    </div>
+        
+{% endblock %}

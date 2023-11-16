@@ -4,7 +4,7 @@
 # Projet GUDLFT
 
 <p align="center">
-  <img src="./icon.jpg" alt="Icone GUDLFT">
+  <img src="./static/img/icon.jpg" alt="Icone GUDLFT">
 </p>
 
  L'objectif de l'application est de rationaliser la gestion des compétitions entre les clubs (hébergement, inscriptions, frais et administration). L'application permettra aux clubs d'inscrire des athlètes aux compétitions organisées au sein

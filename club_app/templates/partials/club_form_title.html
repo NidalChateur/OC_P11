@@ -1,0 +1,11 @@
+{% if 'clubs/create/' in request.url %}
+  <h1 class="my-5 text-center">Inscrire un club</h1>
+{% endif %}
+
+{% if 'clubs' in request.url and 'update' in request.url %}
+  <h1 class="my-5 text-center">Modifier le club {{ club.name }}</h1>
+{% endif %}
+
+{% if 'my-club/create/' in request.url%}
+  <h1 class="my-5 text-center">Créer mon club</h1>
+{% endif %}

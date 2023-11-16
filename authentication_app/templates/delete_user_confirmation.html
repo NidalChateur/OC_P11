@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 
+{% block page_title %}suppression de compte{% endblock %}
+
 {% block content %}
 
     <h1 class="my-5 text-center">Confirmation de suppression de compte</h1>
     <div class="offset-lg-3 col-lg-6 shadow p-3 mb-5 bg-body-tertiary rounded rounded-5 p-5">
 
         <p class="fw-bold my-5">Attention toutes les données liées à ce compte utilisateur seront définitivement perdues !</p>
-        <p>Souhaitez vous vraiment supprimer définitivement le compte utilisateur suivant :
-            <ul>
-                <li>ID : {{ user.id }}</li>
-                <li>Rôle : {{ user.role }}</li>
-                <li>Nom : {{ user.last_name }}</li>
-                <li>Prénom : {{ user.first_name }}</li>
-                <li>Date de naissance : {{ user.birthdate_formatter }}</li>
-                <li>Email : {{ user.email }}</li>
-            </ul>
-        </p>
+
+        <p>Souhaitez vous vraiment supprimer définitivement le compte utilisateur suivant :</p>
+        <ul>
+            <li>ID : {{ user.id }}</li>
+            <li>Rôle : {{ user.role }}</li>
+            <li>Nom : {{ user.last_name }}</li>
+            <li>Prénom : {{ user.first_name }}</li>
+            <li>Date de naissance : {{ user.birthdate_formatter }}</li>
+            <li>Email : {{ user.email }}</li>
+        </ul>
     
         <!-- buttons -->
         <p class="my-5">
