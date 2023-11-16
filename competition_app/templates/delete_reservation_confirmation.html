@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1 class="my-5 text-center">Confirmation de suppression de réservation</h1>
+    <div class="offset-lg-3 col-lg-6 shadow p-3 mb-5 bg-body-tertiary rounded rounded-5 p-5">
+
+        
+        <p class="fw-bold my-5">Souhaitez vous vraiment supprimer définitivement la réservation suivante :</p>
+
+        <ul>
+            <li>ID : {{ reservation.id }}</li>
+            <li>Club : {{ reservation.club_name }}</li>
+            <li>Compétition : {{ reservation.competition_name }}</li>
+            <li>Places réservées : {{ reservation.number_of_spots }}</li>
+        </ul>
+        
+    
+        <!-- buttons -->
+        <p class="my-5">
+            {% if delete_from_my_reservation %}
+                <a href="{{url_for('competition_app_authenticated.delete_reservation',id=reservation.id)}}" role="button" class="btn btn-danger  d-block">
+                    Supprimer définitivement ma réservation
+                </a> 
+            {% else %}
+                <a href="{{ url_for('competition_app_admin.delete_reservation', id=reservation.id) }}" role="button" class="btn btn-danger  d-block">
+                    Supprimer définitivement la réservation
+                </a> 
+            {% endif %}
+        </p>
+    </div>
+
+
+{% endblock %}
