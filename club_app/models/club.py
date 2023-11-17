@@ -68,8 +68,8 @@ class Club(db.Model, CrudMixin):
         if not isinstance(value, int):
             raise ValueError("Le nombre de point doit être de type int !")
 
-        if value < 1:
-            raise ValueError("Le nombre de point ne peut être < 1 !")
+        if value < 0:
+            raise ValueError("Le nombre de point ne peut être < 0 !")
 
         return value
 

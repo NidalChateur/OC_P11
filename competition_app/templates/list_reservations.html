@@ -129,6 +129,8 @@
         
                     <tbody>
                         {% for reservation in reservations %}
+                            {% if reservation.is_cancelable %}
+
                             <tr> 
                                 <td>{{ reservation.competition_name }}</td>
                                 <td>{{ reservation.number_of_spots }}</td>
@@ -138,6 +140,7 @@
                                     </a>
                                 </td>
                             </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
 

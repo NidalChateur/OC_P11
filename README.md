@@ -22,30 +22,42 @@ maximum de 12 athlètes.
  ## Réalisations
  - <a href="https://github.com/OpenClassrooms-Student-Center/Python_Testing/issues"> Phase 1 du projet : régler les bogues du POC. </a>
  - <a href="https://github.com/NidalChateur/OC_P11_GUDLFT/blob/main/mission/Spe%CC%81cifications_fonctionnelles.pdf">Phase 2 du projet : améliorer les fonctionnalités de l'application par des tests.</a> 
+ - <a href="https://github.com/NidalChateur/OC_P11_GUDLFT/blob/main/mission/schema_base_de_donnee_P11.xlsx">Schéma de base de donnée GUDLFT.</a> 
 
 ## Cas d'usages
 
  #### Cas d'usages d'un utilisateur "visiteur" (non connecté)
-- Par souci de transparence, les visiteurs peuvent consulter le nombre de points disponibles pour chaque club. 
+  1. Par souci de transparence, les visiteurs peuvent consulter le nombre de points disponibles pour chaque club. 
+  2. Les visiteurs peuvent s'inscrire sur la plateforme GUDLFT en créant un compte "secrétaire".
 
  #### Cas d'usages d'un utilisateur "secrétaire"
-  1. Les secrétaires des clubs pourront utiliser leur adresse électronique pour se connecter.
-  2. Les secrétaires peuvent consulter la liste des compétitions à venir.
-  3. Les secrétaires pourront ensuite sélectionner une compétition et utiliser leurs points pour acheter des places.
-  4. Les secrétaires devraient voir un message confirmant le nombre de places achetées, ou un message indiquant que le concours est complet. Les points utilisés doivent être déduits du total précédent.
-  5. Les secrétaires ne devraient pas pouvoir réserver plus de places que celles disponibles ou plus de 12 places dans une compétition (afin de garantir l'équité envers les autres clubs).
+  1. Les secrétaires de club pourront utiliser leur adresse électronique pour se connecter.
+
+  2. Les secrétaires pourront réinitialiser leur mot de passe sur la rubrique "mot passe oublié".
+
+  3. Les secrétaires pourront créer leur club qui sera associé à leur compte utilisateur secrétaire. 
+  Contrainte : un compte secrétaire ne peut gérer plusieurs clubs à la fois.
+
+  4. Les secrétaires peuvent consulter la liste des compétitions à venir, en ayant un aperçu des places restantes et de la date de chaque compétition. Contraintes : les secrétaires ne pourront pas avoir accès aux compétitions "complètes" ou dont la date est déjà passée. 
+
+  5. Les secrétaires pourront ensuite sélectionner une compétition et utiliser les points de leur club pour réserver des places dans cette compétition. Les points utilisés seront déduits du total précédent. Contraintes : chaque secrétaire ne peut effectuer qu'une seule réservation dans chaque compétition, et les secrétaires ne pourront pas réserver plus de 12 places dans une compétition dans la limite des points que possède leur club (afin de garantir l'équité envers les autres clubs).
+
+  6. Les secrétaires auront la possibilité de consulter leurs réservations et les annuler pour récupérer leurs points. Contrainte : les secrétaires ne peuvent pas annuler une réservation sur une compétition dont la date est déjà passée.
+
   6. Les secrétaires des clubs pourront se déconnecter.
 
  #### Cas d'usages d'un utilisateur "admin"
+ * CRUD : Create, Read, Update, Delete.
+
  1. Les admins pourront utiliser leur adresse électronique pour se connecter.
- 2. Les admins pourront inscrire un secretaire de club sur l'application.
- 3. Les admins pourront supprimer ou bloquer un compte secretaire de club sur l'application.
- 4. Les admins pourront supprimer ou bloquer un compte secretaire de club sur l'application.
- 5. Les admins pourront ajouter une compétition sur l'application.
- 6. Les admins pourront supprimer une compétition sur l'application.
- 7. Les admins pourront attribuer des points aux secrétaires de club sur l'application.
-    
-    
+
+ 2. Les admins pourront réaliser du CRUD sur la liste des utilisateurs inscrits sur l'application.
+
+ 3. Les admins pourront réaliser du CRUD sur la liste des clubs inscrits sur l'application.
+
+ 5. Les admins pourront réaliser du CRUD sur la liste des compétitions inscrites sur l'application.
+
+ 6. Les admins pourront réaliser du CRUD sur la liste des réservations inscrites sur l'application.    
 
 ## Pré-requis
 
@@ -89,5 +101,14 @@ Lorsque le serveur fonctionne, l'application peut être consultée à partir de 
 
 Les étapes 1, 2 et 4 ne sont requises que pour l'installation initiale. Pour les lancements ultérieurs du serveur de l'application, il suffit d'exécuter les étapes 3 et 5 à partir du répertoire racine du projet.
 
+## Générer un rapport d'erreur grâce à flake8
+
+Flake8 est souvent utilisé pour vérifier le respect des conventions de style PEP 8 dans le code Python.
+
+Pour réaliser ceci, se positionner à la racine du projet puis exécuter dans le terminal : 
+
+`flake8`
+
+Un rapport d'erreur au format html, sera alors disponible dans le dossier "./flake8_report/".
 
 

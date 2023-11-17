@@ -41,7 +41,7 @@ class ListReservations(MethodView):
                 .all()
             )
 
-        return render_template("list_reservations.html", reservations=club_reservations)
+        return render_template("list_reservations.html", reservations=club_reservations, club=club)
 
 
 class CreateReservation(MethodView):
@@ -155,13 +155,39 @@ class DeleteReservation(MethodView):
 
     def get(self, id):
         reservation = Reservation.query.get(id)
-        if reservation:
-            competition_name = reservation.competition_name
-            reservation.delete()
+        club = Club.query.filter_by(secretary_id=current_user.id).first()
 
+        if not reservation:
+            flash("Aucune réservation trouvée !", "error")
+
+            return redirect(url_for("competition_app_authenticated.list_reservations"))
+
+        if not club:
+            flash("Vous n'avez pas club !", "error")
+
+            return redirect(url_for("competition_app_authenticated.list_reservations"))
+
+        if not reservation.is_cancelable:
             flash(
-                f"La réservation effectuée sur la compétition '{competition_name}' a été supprimé avec succès",
-                "success",
+                "Cette réservation n'est pas annulable car la date de compétition est passée !",
+                "error",
             )
 
             return redirect(url_for("competition_app_authenticated.list_reservations"))
+
+        competition_name = reservation.competition_name
+        recovered_points = reservation.number_of_spots
+        reservation.delete()
+        club.points += recovered_points
+        club.save()
+
+        flash(
+            f"La réservation effectuée sur la compétition '{competition_name}' a été supprimé avec succès",
+            "success",
+        )
+
+        flash(
+            f"Votre club '{club.name}' a récupéré {recovered_points} point(s).", "info"
+        )
+
+        return redirect(url_for("competition_app_authenticated.list_reservations"))

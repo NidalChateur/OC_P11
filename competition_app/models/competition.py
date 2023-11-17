@@ -87,8 +87,8 @@ class Competition(db.Model, CrudMixin):
         if not isinstance(value, int):
             raise ValueError("La capacité (nombre de place) doit être de type int !")
 
-        if value < 1:
-            raise ValueError("La capacité (nombre de place) ne peut être < 1 !")
+        if value < 0:
+            raise ValueError("La capacité (nombre de place) ne peut être < 0 !")
 
         return value
 
@@ -191,9 +191,6 @@ class Reservation(db.Model, CrudMixin):
 
         if not club:
             raise ValueError("L'id de ce club n'existe pas !")
-
-        if club.points == 0:
-            raise ValueError("Le club ne possède plus de point !")
 
         return value
 
