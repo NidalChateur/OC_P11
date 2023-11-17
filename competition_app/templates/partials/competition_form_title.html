@@ -1,0 +1,14 @@
+<!-- used in competition_app_admin.create_competition view-->
+{% if 'competitions/create/' in request.url %}
+  <h1 class="my-5 text-center">Ajouter une compétition</h1>
+{% endif %}
+
+
+
+<!-- used in competition_app_authenticated.create_reservation view-->
+{% if competition %}
+  <h1 class="my-5 text-center">Réserver des places dans la  compétition '{{competition.name}}'</h1>
+  {% if club %}
+    <p class="fw-bold">ℹ️ Votre club '{{club.name}}' possède {{club.points}} {{"points" if club.points>0 else "point"}} à dépenser pour réaliser des réservations.</p>
+  {% endif %}
+{% endif %}
