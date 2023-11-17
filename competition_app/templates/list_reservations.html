@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block page_title %}Réservations{% endblock %}
+
+{% block content %}
+
+    {% if current_user.is_admin %}
+        <h1 class="my-5 text-center">Liste des réservations [Admin]</h1>
+    {% else %}
+        <h1 class="my-5 text-center">Liste des réservations </h1>
+    {% endif %}
+
+    <div class="row">
+        
+        {% if current_user.is_admin %}
+            <!-- admin on wide screen -->
+            <div class="d-none d-lg-block">
+            
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Club</th>
+                            <th scope="col" >Compétition</th>
+                            <th scope="col">Places réservées</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for reservation in reservations %}
+                            <!-- rows -->
+                            <tr>            
+                                <th scope="row">{{ reservation.id }}</th>
+                                <td>{{ reservation.club_name }}</td>
+                                <td>{{ reservation.competition_name }}</td>
+                                <td>{{ reservation.number_of_spots }}</td>
+                                <td>
+                                    <a role="button" class="btn btn-danger btn-sm" href="{{ url_for('competition_app_admin.delete_reservation_confirmation',id=reservation.id) }}">
+                                        Supprimer
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+        
+                </table>
+
+            </div>
+
+            <!-- admin on small screen -->
+            <div class="d-lg-none">
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                        <tr>
+                            <th scope="col">Club</th>
+                            <th scope="col" >Compétition</th>
+                            <th scope="col">Places</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for reservation in reservations %}
+                            <!-- rows -->
+                            <tr>            
+                                <td>{{ reservation.club_name }}</td>
+                                <td>{{ reservation.competition_name }}</td>
+                                <td>{{ reservation.number_of_spots }}</td>
+                                <td>
+                                    <a title="Supprimer" role="button" class="btn" href="{{ url_for('competition_app_admin.delete_reservation_confirmation',id=reservation.id) }}">
+                                        ❌
+                                    </a>
+                                </td>
+                            </tr>    
+                        {% endfor %}
+        
+                    </tbody>
+        
+                </table>
+            </div>
+        {% else %}
+            <!-- authenticated on wide screen -->
+            <div class="d-none d-lg-block">
+            
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                        <tr>
+                            <th scope="col">Club</th>
+                            <th scope="col" >Compétition</th>
+                            <th scope="col">Places réservées</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        <!-- rows -->        
+                        {% for reservation in reservations %}
+                            {% if reservation.is_cancelable %}
+                                <tr> 
+                                    <td>{{ reservation.club_name }}</td>
+                                    <td>{{ reservation.competition_name }}</td>
+                                    <td>{{ reservation.number_of_spots }}</td>
+                                    <td>
+                                        <a href="{{url_for('competition_app_authenticated.delete_reservation_confirmation',id=reservation.id)}}" role="button" class="btn btn-primary">
+                                            Supprimer
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                                    
+                    </tbody>
+        
+                </table>
+
+            </div>
+
+            <!-- authenticated on small screen -->
+            <div class="d-lg-none">
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                        <tr>
+                            <th scope="col">Compétition</th>
+                            <th scope="col">Places</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for reservation in reservations %}
+                            {% if reservation.is_cancelable %}
+
+                            <tr> 
+                                <td>{{ reservation.competition_name }}</td>
+                                <td>{{ reservation.number_of_spots }}</td>
+                                <td>
+                                    <a href="{{url_for('competition_app_authenticated.delete_reservation_confirmation',id=reservation.id)}}" role="button" class="btn btn-primary" title="Supprimer">
+                                        ❌
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        {% endif %}
+
+    </div>
+    {% if not reservations %}
+        <p>Pas de réservation enregistrée.</p>
+    {% endif %}
+        
+{% endblock %}

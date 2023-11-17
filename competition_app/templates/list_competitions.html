@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block page_title %}Compétitions{% endblock %}
+
+{% block content %}
+
+    {% if current_user.is_admin %}
+        <h1 class="my-5 text-center">Liste des compétitions [Admin]</h1>
+        <p>
+            <a class="btn btn-primary" href="{{url_for('competition_app_admin.create_competition')}}">
+                Ajouter une compétition
+            </a>
+        </p>
+    {% else %}
+        <h1 class="my-5 text-center">Liste des compétitions</h1>
+    {% endif %}
+
+    {% if club %}
+        <p class="fw-bold">ℹ️ Votre club '{{club.name}}' possède {{club.points}} {{"points" if club.points>0 else "point"}} à dépenser pour réaliser des réservations.</p>
+    {% endif %}
+
+    <div class="row">
+        
+        {% if current_user.is_admin %}
+            <!-- admin on wide screen -->
+            <div class="d-none d-lg-block">
+            
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col" >Date</th>
+                            <th scope="col">Capacité</th>
+                            <th scope="col">Places</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for competition in competitions %}
+                            <!-- rows -->
+                            <tr>            
+                                <th scope="row">{{ competition.id }}</th>
+                                <td>{{ competition.name }}</td>
+                                <td>{{ competition.start_date_formatter }}</td>
+                                <td>{{ competition.capacity }}</td>
+                                <td>{{ competition.remaining_spots }}</td>
+                                <td>
+                                    <a role="button" class="btn btn-danger btn-sm" href="{{ url_for('competition_app_admin.delete_competition_confirmation',id=competition.id) }}">
+                                        Supprimer
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+        
+                </table>
+
+            </div>
+
+            <!-- admin on small screen -->
+            <div class="d-lg-none">
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Places</th>
+                    </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for competition in competitions %}
+                        <!-- rows -->
+                        <tr>            
+                            <td>{{ competition.name }}</td>
+                            <td>{{ competition.remaining_spots }}</td>
+                            <td>
+                                <a title="Supprimer" role="button" class="btn" href="{{ url_for('competition_app_admin.delete_competition_confirmation',id=competition.id) }}">
+                                    ❌
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+        
+                    </tbody>
+        
+                </table>
+            </div>
+        {% else %}
+            <!-- authenticated on wide screen -->
+            <div class="d-none d-lg-block">
+            
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                        <tr>
+                            <th scope="col">Nom</th>
+                            <th scope="col" >Date</th>
+                            <th scope="col">Capacité</th>
+                            <th scope="col">Places</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for competition in competitions %}
+                            {% if not competition.has_started and not competition.is_full %}
+                                <!-- rows -->        
+                                
+                                <tr> 
+                                    <td>{{ competition.name }}</td>
+                                    <td>{{ competition.start_date_formatter }}</td>
+                                    <td>{{ competition.capacity }}</td>
+                                    <td>{{ competition.remaining_spots }}</td>
+                                    {% if club %}
+                                        <td><a href="{{url_for('competition_app_authenticated.create_reservation', id=competition.id)}}" role="button" class="btn btn-primary">Réserver</a></td>
+                                    {% endif %}
+                                </tr>
+                                    
+                            {% endif %}
+                        {% endfor %}
+        
+                    </tbody>
+        
+                </table>
+
+            </div>
+
+            <!-- authenticated on small screen -->
+            <div class="d-lg-none">
+                <table class="table table-hover">
+                    <!-- columns -->
+                    <thead>
+                        <tr>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Places</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for competition in competitions %}
+                            {% if not competition.has_started and not competition.is_full %}
+                                <!-- rows -->
+                                <tr>            
+                                    <td>{{ competition.name }}</td>
+                                    <td>{{ competition.capacity }}</td>
+                                    {% if club %}
+                                        <td><a href="{{url_for('competition_app_authenticated.create_reservation', id=competition.id)}}" role="button" title="Réserver" class="btn">➕</a></td>
+                                    {% endif %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        {% endif %}
+        {% if not competitions %}
+            <p>Pas de compétition enregistrée.</p>
+        {% endif %}
+
+    </div>
+        
+{% endblock %}

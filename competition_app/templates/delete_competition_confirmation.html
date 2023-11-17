@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1 class="my-5 text-center">Confirmation de suppression de compétition</h1>
+    <div class="offset-lg-3 col-lg-6 shadow p-3 mb-5 bg-body-tertiary rounded rounded-5 p-5">
+
+        <p class="fw-bold my-5">Attention toutes les données liées à cette compétition seront définitivement perdues !</p>
+        <p>Souhaitez vous vraiment supprimer définitivement la compétition suivante :</p>
+        
+        <ul>
+            <li>ID : {{ competition.id }}</li>
+            <li>Nom : {{ competition.name }}</li>
+            <li>Date : {{ competition.start_date_formatter }}</li>
+            <li>Capacité : {{ competition.capacity }} places</li>
+        </ul>
+    
+        <!-- buttons -->
+        <p class="my-5">
+
+            <a href="{{ url_for('competition_app_admin.delete_competition', id=competition.id) }}" role="button" class="btn btn-danger  d-block">
+                Supprimer définitivement la compétition {{competition.name}}
+            </a> 
+
+        </p>
+    </div>
+
+
+{% endblock %}
