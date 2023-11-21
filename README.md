@@ -28,6 +28,7 @@ maximum de 12 athlètes.
 
  #### Cas d'usages d'un utilisateur "visiteur" (non connecté)
   1. Par souci de transparence, les visiteurs peuvent consulter le nombre de points disponibles pour chaque club. 
+
   2. Les visiteurs peuvent s'inscrire sur la plateforme GUDLFT en créant un compte "secrétaire".
 
  #### Cas d'usages d'un utilisateur "secrétaire"
@@ -103,12 +104,23 @@ Les étapes 1, 2 et 4 ne sont requises que pour l'installation initiale. Pour le
 
 ## Générer un rapport d'erreur grâce à flake8
 
-Flake8 est souvent utilisé pour vérifier le respect des conventions de style PEP 8 dans le code Python.
-
-Pour réaliser ceci, se positionner à la racine du projet puis exécuter dans le terminal : 
+Flake8 est souvent utilisé pour vérifier le respect des conventions de style PEP 8 dans le code Python. Pour réaliser ceci, se positionner à la racine du projet puis exécuter dans le terminal : 
 
 `flake8`
 
-Un rapport d'erreur au format html, sera alors disponible dans le dossier "./flake8_report/".
+Un rapport d'erreur au format html, sera alors disponible dans le dossier "flake8_report".
 
+## Générer un rapport complet et détaillé de couverture de test 
+
+La couverture de test vérifie le taux de lignes couvertes par des tests. 
+
+Pour réaliser ceci, se positionner à la racine du projet puis exécuter dans le terminal : 
+
+`pytest --cov=. --cov-report html`
+
+Quand le script est terminé, vous découvrez qu'un nouveau dossier "htmlcov" a été créé à l'endroit où vous avez lancé la commande. Ce dossier contient différents documents dont des fichiers HTML.
+
+Ouvrez le fichier "index.html" qui contient un résumé du rapport de couverture.
+
+À partir de cette page, vous pourrez naviguer à travers les différents fichiers afin d’avoir le détail sur la couverture. Effectivement, vous aurez un rapport détaillé pour chaque fichier source sous le format HTML.
 

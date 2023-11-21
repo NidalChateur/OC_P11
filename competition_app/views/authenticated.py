@@ -35,13 +35,17 @@ class ListReservations(MethodView):
     def get(self):
         club = Club.query.filter_by(secretary_id=current_user.id).first()
         if club:
-            club_reservations = (
+            reservations = (
                 Reservation.query.filter_by(club_id=club.id)
                 .order_by(Reservation.competition_id)
                 .all()
             )
+        else:
+            reservations = []
 
-        return render_template("list_reservations.html", reservations=club_reservations, club=club)
+        return render_template(
+            "list_reservations.html", reservations=reservations, club=club
+        )
 
 
 class CreateReservation(MethodView):
@@ -107,7 +111,7 @@ class CreateReservation(MethodView):
 
             if entered_number > int(club.points):
                 form.number_of_spots.errors.append(
-                    f"Votre club possède seulement {club.points} point(s)..."
+                    f"Votre club possède {club.points} point(s)..."
                 )
 
             elif entered_number > competition.remaining_spots:
