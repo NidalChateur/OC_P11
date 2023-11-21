@@ -19,16 +19,15 @@ from club_app.urls.public import club_app_public
 from competition_app.models.competition import Competition
 from competition_app.urls.admin import competition_app_admin
 from competition_app.urls.authenticated import competition_app_authenticated
-from competition_app.urls.public import competition_app_public
 
 
-def create_app():
+def create_app(config="config.Development"):
     # Load environment variables
     load_dotenv()
 
     app = Flask(__name__)
 
-    app.config.from_object("config")
+    app.config.from_object(config)
 
     app.register_blueprint(authentication_app_public)
     app.register_blueprint(authentication_app_authenticated)
@@ -38,7 +37,6 @@ def create_app():
     app.register_blueprint(club_app_authenticated)
     app.register_blueprint(club_app_admin)
 
-    app.register_blueprint(competition_app_public)
     app.register_blueprint(competition_app_authenticated)
     app.register_blueprint(competition_app_admin)
 
@@ -56,7 +54,7 @@ def create_app():
     # flask_login requires these lines
     login_manager = LoginManager()
     login_manager.init_app(app)
-    # redirect to login view if current_user is not connected
+    # redirect to login view if current_user is not authenticated
     login_manager.login_view = "authentication_app_public.login"
 
     @login_manager.user_loader
@@ -86,5 +84,5 @@ def create_app():
 
 
 if __name__ == "__main__":
-    app = create_app()
+    app = create_app(config="config.Development")
     app.run(debug=True)

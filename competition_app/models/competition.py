@@ -49,9 +49,7 @@ class Competition(db.Model, CrudMixin):
 
     @property
     def has_started(self) -> bool:
-        if self.start_date > datetime.utcnow():
-            return False
-        return True
+        return not (self.start_date > datetime.utcnow())
 
     @property
     def remaining_spots(self) -> int:
@@ -66,10 +64,7 @@ class Competition(db.Model, CrudMixin):
 
     @property
     def is_full(self) -> bool:
-        if self.remaining_spots > 0:
-            return False
-
-        return True
+        return not (self.remaining_spots > 0)
 
     def delete_reservations(self):
         """all competition reservations will be deleted"""
@@ -85,15 +80,18 @@ class Competition(db.Model, CrudMixin):
     @validates("capacity")
     def validate_capacity(self, key, value):
         if not isinstance(value, int):
-            raise ValueError("La capacité (nombre de place) doit être de type int !")
+            raise ValueError("La capacité doit être de type int !")
 
         if value < 0:
-            raise ValueError("La capacité (nombre de place) ne peut être < 0 !")
+            raise ValueError("La capacité ne peut être inférieur à 0 !")
 
         return value
 
     @validates("start_date")
     def validate_start_date(self, key, value):
+        if not isinstance(value, datetime):
+            raise ValueError("La date de début doit être de type datetime !")
+
         if value < datetime.utcnow() + timedelta(days=7):
             raise ValueError(
                 "Le début de la compétition ne doit pas commencer avant 7 jours !"
@@ -153,19 +151,19 @@ class Reservation(db.Model, CrudMixin):
 
     @property
     def is_cancelable(self) -> bool:
-        competition = Competition.query.get(self.competition_id)
+        competition = db.session.get(Competition, self.competition_id)
 
         return not competition.has_started
 
     @property
-    def club_name(self) -> bool:
-        club = Club.query.get(self.club_id)
+    def club_name(self) -> str:
+        club = db.session.get(Club, self.club_id)
 
         return club.name
 
     @property
-    def competition_name(self) -> bool:
-        competition = Competition.query.get(self.competition_id)
+    def competition_name(self) -> str:
+        competition = db.session.get(Competition, self.competition_id)
 
         return competition.name
 
@@ -175,10 +173,10 @@ class Reservation(db.Model, CrudMixin):
             raise ValueError("Le nombre de place doit être de type int !")
 
         if value < 1:
-            raise ValueError("Le nombre de place ne peut être < 1 !")
+            raise ValueError("Le nombre de place ne peut être inférieur à 1 !")
 
         if value > 12:
-            raise ValueError("Le nombre de place ne peut être > 12 !")
+            raise ValueError("Le nombre de place ne peut être supérieur à 12 !")
 
         return value
 
@@ -187,19 +185,22 @@ class Reservation(db.Model, CrudMixin):
         if not isinstance(value, int):
             raise ValueError("L'id du club doit être de type int !")
 
-        club = Club.query.get(value)
+        club = db.session.get(Club, value)
 
         if not club:
             raise ValueError("L'id de ce club n'existe pas !")
+
+        if not club.secretary_id:
+            raise ValueError("Pour réserver le club doit avoir un secrétaire !")
 
         return value
 
     @validates("competition_id")
     def validate_competition_id(self, key, value):
         if not isinstance(value, int):
-            raise ValueError("Le nombre de place doit être de type int !")
+            raise ValueError("L'id de la compétition doit être de type int !")
 
-        competition = Competition.query.get(value)
+        competition = db.session.get(Competition, value)
         if not competition:
             raise ValueError("L'id de cette compétition n'existe pas !")
 

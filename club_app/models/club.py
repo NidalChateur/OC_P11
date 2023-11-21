@@ -37,18 +37,18 @@ class Club(db.Model, CrudMixin):
         return str(self)
 
     @property
-    def email(self):
+    def email(self) -> str:
         if self.secretary_id:
-            secretary = User.query.get(self.secretary_id)
+            secretary = db.session.get(User, self.secretary_id)
 
             return secretary.email
 
         return ""
 
     @property
-    def secretary_name(self):
+    def secretary_name(self) -> str:
         if self.secretary_id:
-            secretary = User.query.get(self.secretary_id)
+            secretary = db.session.get(User, self.secretary_id)
 
             return f"{secretary.first_name} {secretary.last_name}"
 
@@ -56,8 +56,8 @@ class Club(db.Model, CrudMixin):
 
     @validates("secretary_id")
     def validate_secretary_id(self, key, value):
-        if value:
-            secretary = User.query.get(value)
+        if value is not None:
+            secretary = db.session.get(User, value)
             if not secretary:
                 raise ValueError("L'id de ce secrétaire n'existe pas !")
 
@@ -69,7 +69,7 @@ class Club(db.Model, CrudMixin):
             raise ValueError("Le nombre de point doit être de type int !")
 
         if value < 0:
-            raise ValueError("Le nombre de point ne peut être < 0 !")
+            raise ValueError("Le nombre de point ne peut être inférieur à 0 !")
 
         return value
 

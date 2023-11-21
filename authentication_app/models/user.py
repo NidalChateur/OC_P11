@@ -10,6 +10,8 @@ from . import CrudMixin, bcrypt, db
 
 class User(db.Model, CrudMixin, UserMixin):
     IMAGE_PATH = "img/profile_photo/"
+    SPECIAL_CHARACTERS = '!@#$%^&*(),.;?":{}|<>_=/+-*µ£€§¤çàùéè°'
+    TOKEN_LENGTH=32
 
     id = db.Column(db.Integer, primary_key=True)
 
@@ -63,34 +65,36 @@ class User(db.Model, CrudMixin, UserMixin):
     def birthdate_formatter(self) -> str:
         return self.birthdate.strftime("%d/%m/%Y")
 
-    # inutile ?
     def _validate_password(self, password: str):
         if not isinstance(password, str):
-            raise ValueError("Votre mot de passe doit être du type str (string)")
+            raise ValueError("Votre mot de passe doit être de type str !")
 
         if len(password) < 8:
             raise ValueError(
-                "Votre mot de passe doit contenir au minimum 8 caractères."
+                "Votre mot de passe doit contenir au minimum 8 caractères !"
             )
         if password.isdigit():
             raise ValueError(
-                "Votre mot de passe ne peut pas être entièrement numérique."
+                "Votre mot de passe ne peut pas être entièrement numérique !"
             )
         if password.isalpha():
-            raise ValueError("Votre mot de passe doit contenir au moins un chiffre.")
+            raise ValueError("Votre mot de passe doit contenir au moins un chiffre !")
 
         if not re.search(r"[A-Z]", password):
             raise ValueError(
-                "Votre mot de passe doit contenir au moins une lettre majuscule."
+                "Votre mot de passe doit contenir au moins une lettre majuscule !"
             )
         if not re.search(r"[a-z]", password):
             raise ValueError(
-                "Votre mot de passe doit contenir au moins une lettre minuscule."
+                "Votre mot de passe doit contenir au moins une lettre minuscule !"
             )
 
-        if all([character in password for character in self.SPECIAL_CHARACTERS]):
+        specials_characters_in_password = [
+            character for character in password if character in self.SPECIAL_CHARACTERS
+        ]
+        if not specials_characters_in_password:
             raise ValueError(
-                "Votre mot de passe doit contenir au moins un caractère spécial."
+                "Votre mot de passe doit contenir au moins un caractère spécial !"
             )
 
     def set_password(self, password: str):
@@ -110,7 +114,7 @@ class User(db.Model, CrudMixin, UserMixin):
         return bcrypt.check_password_hash(self.password, password)
 
     def generate_reset_token(self):
-        self.token = secrets.token_urlsafe(32)
+        self.token = secrets.token_urlsafe(self.TOKEN_LENGTH)
         self.token_expiration_date = datetime.utcnow() + timedelta(hours=1)
         self.save()
 
@@ -127,23 +131,27 @@ class User(db.Model, CrudMixin, UserMixin):
 
         return age
 
-    # inutile?
     @validates("birthdate")
-    def validate_date_of_birth(self, key, value):
+    def validate_birthdate(self, key, value):
         """check if the user age is > 18"""
 
+        if not isinstance(value, date):
+            raise ValueError("L'attribut birthdate doit être de type date !")
+
         if self.age(value) < 18:
-            raise ValueError("L'utilisateur doit être majeur (18 ans ou plus).")
+            raise ValueError("L'utilisateur doit avoir 18 ans ou plus !")
         return value
 
-    # inutile?
     @validates("email")
     def validate_email(self, key, value):
         """check the email format and if the email is unique in db,
         email format should be like xxxxx@xxxx.xx"""
 
+        if not isinstance(value, str):
+            raise ValueError("L'attribut email doit être de type str !")
+
         if not re.match(r"[^@]+@[^@]+\.[^@]+", value):
-            raise ValueError("Adresse e-mail invalide")
+            raise ValueError("Adresse e-mail invalide !")
 
         used_email = User.query.filter_by(email=value).first()
 
@@ -157,7 +165,6 @@ class User(db.Model, CrudMixin, UserMixin):
 
         return value
 
-    # inutile?
     @validates("password")
     def validate_password(self, key, value):
         """check the password complexity"""
