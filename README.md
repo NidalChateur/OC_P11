@@ -124,3 +124,48 @@ Ouvrez le fichier "index.html" qui contient un résumé du rapport de couverture
 
 À partir de cette page, vous pourrez naviguer à travers les différents fichiers afin d’avoir le détail sur la couverture. Effectivement, vous aurez un rapport détaillé pour chaque fichier source sous le format HTML.
 
+## Réaliser un test de performance Locust
+
+Locust est un outil de test de performance open source. Il permet de tester la charge de l’application en simulant des milliers d’utilisateurs simultanément sur notre application. 
+
+Pour réaliser ce test de performance :
+
+1. Lancer le serveur flask de l'application dans un terminal cf "Installation" partie 5.
+
+2. Ouvrir un nouveau terminal tout en conservant le terminal faisant tourner le serveur flask et entrer les lignes de commande suivantes: 
+
+```
+cd tests/performance/
+
+locust
+```
+3. Ouvrir un navigateur à cette adresse http://localhost:8089/
+
+4. Sur cette page, vous devez préciser :
+
+    * Number of total users to simulate : le nombre total d'utilisateurs à simuler.
+
+    * Spawn rate : le taux de création d'utilisateurs, il correspond au nombre d’utilisateurs créés par seconde jusqu’à atteindre le nombre total d’utilisateurs. 
+
+    * Host : l’adresse de votre application, dans notre cas l’application est lancée sur http://localhost:5000/
+
+5. Analyse des résultats :
+    - Requests : Nombre total de demandes effectuées jusqu'à présent.
+
+    - Fails : Nombre de demandes qui ont échoué.
+
+    - Median : Vitesse de réponse pour 50 centiles en ms.
+
+    - 90%ile : Vitesse de réponse pour 90 centiles en ms.
+
+    - Average : Vitesse de réponse moyenne en ms.
+
+    - Min : Vitesse de réponse minimale en ms.
+
+    - Max : Vitesse de réponse maximale en ms.
+
+    - Average size : Taille moyenne des réponses en octets.
+
+    - Current RPS : Requêtes actuelles par seconde.
+
+    - Current Failure/s : Nombre total d'échecs par seconde

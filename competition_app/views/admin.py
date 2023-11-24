@@ -4,6 +4,7 @@ from flask import flash, redirect, render_template, url_for
 from flask.views import MethodView
 
 from authentication_app.decorator import admin_required
+from club_app.models.club import Club, db
 
 from ..forms.admin import CreateCompetitionForm
 from ..models.competition import Competition, Reservation
@@ -100,6 +101,10 @@ class DeleteReservation(MethodView):
         reservation = Reservation.query.get(id)
         if reservation:
             reservation_id = reservation.id
+            club = db.session.get(Club, reservation.club_id)
+            if reservation.is_cancelable and club:
+                club.points += reservation.number_of_spots
+                club.save()
             reservation.delete()
 
             flash(

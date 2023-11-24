@@ -22,7 +22,7 @@ competition_app_authenticated.add_url_rule(
     "/reservations/", view_func=ListReservations.as_view("list_reservations")
 )
 competition_app_authenticated.add_url_rule(
-    "/reservations/<int:id>/create",
+    "/reservations/<int:id>/create/",
     view_func=CreateReservation.as_view("create_reservation"),
 )
 competition_app_authenticated.add_url_rule(

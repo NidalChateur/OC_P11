@@ -75,7 +75,11 @@ class Competition(db.Model, CrudMixin):
 
         if competition_reservations:
             for reservation in competition_reservations:
-                db.session.delete(reservation)
+                club = db.session.get(Club, reservation.club_id)
+                if reservation.is_cancelable and club:
+                    club.points += reservation.number_of_spots
+                    club.save()
+                reservation.delete()
 
     @validates("capacity")
     def validate_capacity(self, key, value):

@@ -25,7 +25,7 @@ class Test_Competition_Urls_Authenticated:
                 ListReservations,
             ),
             (
-                "/reservations/<int:id>/create",
+                "/reservations/<int:id>/create/",
                 "competition_app_authenticated.create_reservation",
                 CreateReservation,
             ),

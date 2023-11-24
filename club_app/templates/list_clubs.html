@@ -3,7 +3,6 @@
 {% block page_title %}{{"Clubs" if "admin/clubs/" in request.url else "Accueil"}}{% endblock %}
 
 {% block content %}
-
     {% if 'admin/clubs' in request.url %}
         <h1 class="my-5 text-center">Liste des clubs [Admin]</h1>
         <p><a class="btn btn-primary" href="{{ url_for('club_app_admin.create_club') }}">Inscrire un club</a></p>

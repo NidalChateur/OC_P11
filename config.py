@@ -11,6 +11,7 @@ class Config:
 
 class Development(Config):
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + str(Config.BASE_DIR / "app.db")
+    WTF_CSRF_ENABLED = False
 
 
 class Testing(Config):
@@ -20,6 +21,7 @@ class Testing(Config):
     LIVESERVER_PORT = 8943
     LIVESERVER_TIMEOUT = 10
     SERVER_NAME = "localhost:8943"
+    WTF_CSRF_ENABLED = False
 
 
 class Production(Config):

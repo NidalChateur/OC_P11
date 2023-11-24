@@ -101,11 +101,13 @@
                                     <td>{{ reservation.club_name }}</td>
                                     <td>{{ reservation.competition_name }}</td>
                                     <td>{{ reservation.number_of_spots }}</td>
-                                    <td>
-                                        <a href="{{url_for('competition_app_authenticated.delete_reservation_confirmation',id=reservation.id)}}" role="button" class="btn btn-primary">
-                                            Supprimer
-                                        </a>
-                                    </td>
+                                    {% if club.is_activated %}
+                                        <td>
+                                            <a href="{{url_for('competition_app_authenticated.delete_reservation_confirmation',id=reservation.id)}}" role="button" class="btn btn-danger btn-sm">
+                                                Supprimer
+                                            </a>
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endif %}
                         {% endfor %}
@@ -134,11 +136,13 @@
                             <tr> 
                                 <td>{{ reservation.competition_name }}</td>
                                 <td>{{ reservation.number_of_spots }}</td>
-                                <td>
-                                    <a href="{{url_for('competition_app_authenticated.delete_reservation_confirmation',id=reservation.id)}}" role="button" class="btn btn-primary" title="Supprimer">
-                                        ❌
-                                    </a>
-                                </td>
+                                {% if club.is_activated %}
+                                    <td>
+                                        <a href="{{url_for('competition_app_authenticated.delete_reservation_confirmation',id=reservation.id)}}" role="button" class="btn" title="Supprimer">
+                                            ❌
+                                        </a>
+                                    </td>
+                                {% endif %}
                             </tr>
                             {% endif %}
                         {% endfor %}
