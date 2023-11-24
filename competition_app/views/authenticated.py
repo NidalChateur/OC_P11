@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, url_for
 from flask.views import MethodView
 from flask_login import current_user, login_required
 
-from club_app.models.club import Club
+from club_app.models.club import Club, db
 
 from ..forms.authenticated import CreateReservationForm
 from ..models.competition import Competition, Reservation
@@ -24,6 +24,12 @@ class ListCompetitions(MethodView):
                 "list_competitions.html", competitions=competitions, club=False
             )
 
+        if club and not club.is_activated:
+            flash(
+                "Votre club a été désactivé par l'admin, contactez le pour plus d'information.",
+                "warning",
+            )
+
         return render_template(
             "list_competitions.html", competitions=competitions, club=club
         )
@@ -35,6 +41,12 @@ class ListReservations(MethodView):
     def get(self):
         club = Club.query.filter_by(secretary_id=current_user.id).first()
         if club:
+            if not club.is_activated:
+                flash(
+                    "Votre club a été désactivé par l'admin, contactez le pour plus d'information.",
+                    "warning",
+                )
+
             reservations = (
                 Reservation.query.filter_by(club_id=club.id)
                 .order_by(Reservation.competition_id)
@@ -54,7 +66,7 @@ class CreateReservation(MethodView):
     def get(self, id):
         form = CreateReservationForm()
         club = Club.query.filter_by(secretary_id=current_user.id).first()
-        competition = Competition.query.get(id)
+        competition = db.session.get(Competition, id)
         reservation = Reservation.query.filter_by(
             club_id=club.id, competition_id=competition.id
         ).first()
@@ -64,18 +76,24 @@ class CreateReservation(MethodView):
 
             return redirect(url_for("competition_app_authenticated.list_competitions"))
 
-        if not competition:
-            """ if the competition does not exists """
+        if club.points == 0:
+            flash("Votre club ne possède plus de point !", "error")
 
-            flash("Aucune compétition trouvée !", "error")
+            return redirect(url_for("competition_app_authenticated.list_competitions"))
+
+        if not competition or competition.has_started or competition.is_full:
+            flash("Permission refusée !", "error")
 
             return redirect(url_for("competition_app_authenticated.list_competitions"))
 
         if reservation:
+            """ if the club has already a reservation in this competition """
+
             flash(
                 "Votre club ne peut réaliser qu'une réservation par compétition !",
                 "error",
             )
+
             return redirect(url_for("competition_app_authenticated.list_competitions"))
 
         return render_template(
@@ -85,16 +103,16 @@ class CreateReservation(MethodView):
     def post(self, id):
         form = CreateReservationForm()
         club = Club.query.filter_by(secretary_id=current_user.id).first()
-        competition = Competition.query.get(id)
+        competition = db.session.get(Competition, id)
         reservation = Reservation.query.filter_by(
             club_id=club.id, competition_id=competition.id
         ).first()
 
-        if not club:
+        if not club or club.points == 0:
             return redirect(url_for("competition_app_authenticated.list_competitions"))
 
-        if not competition:
-            flash("Aucune compétition trouvée !", "error")
+        if not competition or competition.has_started or competition.is_full:
+            flash("Permission refusée !", "error")
 
             return redirect(url_for("competition_app_authenticated.list_competitions"))
 
@@ -128,10 +146,8 @@ class CreateReservation(MethodView):
                     number_of_spots=entered_number,
                 )
                 reservation.create()
-                flash(
-                    f"Réservation de {entered_number} place(s) dans la compétition {competition.name}.",
-                    "success",
-                )
+                flash("Réservation réussie !", "success")
+
                 return redirect(
                     url_for("competition_app_authenticated.list_competitions")
                 )

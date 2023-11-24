@@ -1,4 +1,3 @@
-# user_test = User(role="secretary",first_name="first_name",last_name="last_name",birthdate=date(year=2000, month=1, day=1),email="test@test.com")
 import os
 import re
 from datetime import date, datetime

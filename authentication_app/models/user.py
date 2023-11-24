@@ -11,7 +11,7 @@ from . import CrudMixin, bcrypt, db
 class User(db.Model, CrudMixin, UserMixin):
     IMAGE_PATH = "img/profile_photo/"
     SPECIAL_CHARACTERS = '!@#$%^&*(),.;?":{}|<>_=/+-*µ£€§¤çàùéè°'
-    TOKEN_LENGTH=32
+    TOKEN_LENGTH = 32
 
     id = db.Column(db.Integer, primary_key=True)
 

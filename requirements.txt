@@ -1,13 +1,15 @@
+# python version = 3.10.11
+# python.exe -m pip install --upgrade pip
+poetry
+Bootstrap-Flask
 flask
 flask-sqlalchemy
-flask_bootstrap
 flask_wtf
 Flask-Migrate
 Flask-Login
 Flask-Bcrypt
 flask_uploads
 email_validator
-poetry
 pytest
 pytest-flask
 coverage

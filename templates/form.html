@@ -5,14 +5,10 @@
 
     {% block title %}{% endblock %}
 
-    <form method="POST" enctype="multipart/form-data" class="shadow p-5 bg-body-tertiary rounded rounded-5 ">
-        
-        {{ form.csrf_token }}
-        
-        {{ form.hidden_tag() }} 
-        
+    <div class="shadow p-5 bg-body-tertiary rounded rounded-5">
+
         {{ render_form(form) }}
         
-    </form>
+    </div>
 
 {% endblock %}
