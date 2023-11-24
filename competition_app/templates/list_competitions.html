@@ -114,7 +114,7 @@
                                     <td>{{ competition.start_date_formatter }}</td>
                                     <td>{{ competition.capacity }}</td>
                                     <td>{{ competition.remaining_spots }}</td>
-                                    {% if club %}
+                                    {% if club  and club.is_activated %}
                                         <td><a href="{{url_for('competition_app_authenticated.create_reservation', id=competition.id)}}" role="button" class="btn btn-primary">Réserver</a></td>
                                     {% endif %}
                                 </tr>
@@ -146,7 +146,7 @@
                                 <tr>            
                                     <td>{{ competition.name }}</td>
                                     <td>{{ competition.capacity }}</td>
-                                    {% if club %}
+                                    {% if club  and club.is_activated %}
                                         <td><a href="{{url_for('competition_app_authenticated.create_reservation', id=competition.id)}}" role="button" title="Réserver" class="btn">➕</a></td>
                                     {% endif %}
                                 </tr>

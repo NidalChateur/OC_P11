@@ -13,6 +13,11 @@ class MyClub(MethodView):
 
     def get(self):
         club = Club.query.filter_by(secretary_id=current_user.id).first()
+        if club and not club.is_activated:
+            flash(
+                "Votre club a été désactivé par l'admin, contactez le pour plus d'information.",
+                "warning",
+            )
 
         return render_template("my_club.html", club=club)
 

@@ -167,17 +167,32 @@ class TestCompetition:
         assert competition.is_full is not (competition.remaining_spots > 0)
 
     def test_delete_reservations(self, app):
-        # 1. test whether reservations exist for a competition
+        """Test plan:
+        1. test if reservations exist for a competition
+        2. test if reservations have been deleted for a competition
+        3. test if club points have been restored from cancelable reservations
+
+        """
+        # 1. test if reservations exist for a competition
         competition = Competition.query.filter_by(name="Competition test").first()
 
-        reservations_number = Reservation.query.filter_by(
-            competition_id=competition.id
-        ).count()
+        reservations = Reservation.query.filter_by(competition_id=competition.id).all()
+
+        # capture club data before deleting reservations
+        captured_data = [
+            {
+                "club": db.session.get(Club, reservation.club_id),
+                "club_points": db.session.get(Club, reservation.club_id).points,
+                "spent_points": reservation.number_of_spots,
+            }
+            for reservation in reservations
+            if reservation.is_cancelable
+        ]
 
         assert competition is not None
-        assert reservations_number > 0
+        assert len(reservations) > 0
 
-        # 2. test whether reservations have been deleted for a competition
+        # 2. test if reservations have been deleted for a competition
         competition.delete_reservations()
 
         reservations_number = Reservation.query.filter_by(
@@ -185,6 +200,10 @@ class TestCompetition:
         ).count()
 
         assert reservations_number == 0
+
+        # 3. test if club points have been restored from cancelable reservations
+        for data in captured_data:
+            assert data["club"].points == data["club_points"] + data["club_points"]
 
     @pytest.mark.parametrize(
         "capacity, error_message",
@@ -446,12 +465,14 @@ class TestReservation:
             competition.delete()
 
     def test_unique_club_reservation_by_competition(self, app):
-        reservation_1 = db.session.get(Reservation, 1)
-        club = db.session.get(Club, reservation_1.club_id)
-        competition = db.session.get(Competition, reservation_1.competition_id)
+        reservation_1 = self._create_reservation_instance(app)
+        reservation_1.create()
 
         with pytest.raises(IntegrityError):
-            reservation_2 = Reservation(club_id=club.id, competition_id=competition.id)
+            reservation_2 = Reservation(
+                club_id=reservation_1.club_id,
+                competition_id=reservation_1.competition_id,
+            )
             reservation_2.create()
 
         # rollback the last mistaken commit "reservation_2.create()"
